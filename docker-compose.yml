@@ -1,0 +1,30 @@
+version: '3.4'
+
+networks:
+  api-network:
+    driver: bridge
+
+
+services:
+  conversionapi:
+    image: ${DOCKER_REGISTRY-}conversionapi
+    build:
+      context: .
+      dockerfile: ConversionApi/Dockerfile
+    ports:
+       - "8081:80"
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+    networks:
+       - api-network
+  
+
+  audioservice:
+    image: ${DOCKER_REGISTRY-}audioservice
+    build:
+        context: .
+        dockerfile: AudioService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+    networks:
+      - api-network
